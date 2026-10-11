@@ -1,0 +1,7 @@
+
+.package-proof/
+package-proof.json
+*.tgz
+!tests/fixtures/core-source.tgz
+node_modules/
+dist/

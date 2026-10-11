@@ -1,15 +1,25 @@
-# API reference
+# SDK API · 0.2.0-dev.0
 
-## Client
+`QVRFClient` and `OnchainQVRFClient` alias `SolanaQVRFClient`.
 
-`QVRFClient` takes an `EntropyAdapter` and `Repository`. `request({ bytes })` accepts 16 to 4096 bytes and returns a created `RequestRecord`. Generation runs asynchronously after the caller can subscribe to the returned ID. `getRequest(id)` queries the session or repository. `subscribe(id, listener)` observes future updates and returns a real unsubscribe function.
+| Surface | Contract |
+| --- | --- |
+| constructor | `{ rpcUrl, program, wallet?, quoteUrl?, requestStorage?: 'legacy', symbol? }`; native currency is SOL |
+| `quote()` | `{ amount: bigint, recipient, symbol: 'SOL', decimals: 9, capacity: bigint, noRequestRent, ready }` |
+| `serviceQuote(requester?, sequence?)` | GET current price or POST bound persisted identity; validates program, recipient, amount, expiry and request identity |
+| `approveFee()` | Requires connected wallet and returns quote; no separate allowance transaction |
+| `request(input, { expectedFee? })` | Input `{ bytes: 32, mapping, serviceQuote? }`; SDK binds service quote itself; returns schema-4 record after confirmation |
+| `getRequest(sequenceOrId)` | Reopens historical account or event record; IDs bind network, program and sequence |
+| `waitForResult(id, { timeoutMs?, signal? })` | Polls to fulfilled; default 120000 ms; rejects expiry, cancellation or pending timeout |
+| `subscribe(id, listener)` | Polls approximately every 1500 ms; returns unsubscribe function |
+| `verify(record)` | Recomputes proof and compares authoritative RPC record fields, mapping and paid receipt |
+| `verifyProtocolRecord(record)` | Offline fixed-input digest, commitment chain, domain-separated output and deterministic mapping checks |
+| `listRequests()` | Up to 64 newest sequences; availability depends on RPC history |
+| `verifyPayment(record)` | Exact transfer, successful transaction, signed sender, memo and same-transaction proof request |
+| `expire(id)` | Explicit wallet-authorized terminal expiry; not a refund transfer |
 
-`waitForResult(id, { timeoutMs?, signal? })` resolves on produced, rejects on failed, unknown ID, aborted wait or timeout. The default timeout is 10000 ms. Cancellation ends that wait, not the generation request. `applyMapping(id, config)` requires produced output and returns the record with its mapping attached.
+Root also exports `mapOutput`, `ProtocolInput`, `ProtocolRecord`, `RequestRecord` (schema-4 alias), `SolanaWallet`, `MappingConfig`, `Mapping`. `@qentra/sdk/solana` exposes lower-level encoding/payment helpers; `@qentra/sdk/generated` exposes IDL-derived account/event/instruction codecs; `@qentra/sdk/idl` resolves the JSON interface. Generated controller/fulfillment codecs are protocol interfaces, not access to Qentra's private execution service.
 
-`helpers.uniformInt(bytes, min, max)`, `helpers.shuffle(bytes, items)`, `helpers.weightedPick(bytes, items, weights)` and `helpers.pickUnique(bytes, items, count)` return a mapping without attaching it to a request. Use `applyMapping` to persist one on a request.
+`@qentra/sdk/browser` retains the historical browser client, adapter and schema-1 persistence helpers. It is a separate source mode; schema-1 records are not Solana proof records.
 
-## Storage and imports
-
-`Repository` exposes `put(record)`, `get(id)` and `list()`, all asynchronous. `MemoryRepository` clones stored/retrieved objects; `IndexedDBRepository` validates browser records through idb-keyval 6.2.2. `storageError` reports failed persistence while keeping the session result usable.
-
-`validateRecord(unknown)` checks supported browser source/status fields, input digest, output byte length and mapping reproduction, then returns a clone. `mapOutput(bytes, config)` reproduces a mapping from exported hexadecimal bytes. These functions and types are re-exported from the SDK's core peer dependency.
+Application mapping results are `number | string | string[]`. Quote `amount` and capacity are bigint; use strings for JSON transport. Protocol records already store fees and sequence as decimal strings. No callback registration, escrow allowance, subscription balance or token request API is part of the selected native draw journey. The schema retains callback/delivery fields for compatibility; native draws use zero callback addresses and `not-requested` delivery.

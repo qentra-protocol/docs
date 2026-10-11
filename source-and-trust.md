@@ -1,9 +1,19 @@
-# Entropy origin, verification and delivery
+# Architecture and trust boundaries
 
-Qentra Protocol separates quantum-origin entropy, a checkable generation record, reproducible application mapping and onchain delivery. The current source-development adapter is `BrowserEntropyAdapter`, using Web Crypto's `getRandomValues` in the executing environment.
+```mermaid
+flowchart LR
+  App[Fixed tournament or allocation rules] --> SDK[Native Solana SDK]
+  Service[Qentra quote service] --> SDK
+  Wallet[External wallet] --> SDK
+  SDK --> Chain[SOL transfer and thin proof program]
+  Qentra[Private Qentra fulfillment] --> Chain
+  Chain --> Proof[Historical events or account proof]
+  Proof --> Verifier[Offline recomputation and RPC comparison]
+  Verifier --> Result[Reopenable deterministic result]
+```
 
-The adapter explicitly records `browser-cryptographic` source mode. It does not supply a quantum-source certificate. The record's `verification: not-applicable` and `delivery: not-requested` describe this adapter's boundaries. Import replay checks consistency of the recorded input, bytes and mapping. It does not independently authenticate where the entropy came from or settle an onchain transaction.
+The inspectable interface contains native request/result APIs, generated instruction/account/event codecs, the IDL and deterministic helpers. Qentra's service issues persisted prices, checks payment receipts and schedules checked reveals. Service execution and unrevealed source values remain outside the package. The program records commitments and checks reveal/output binding; it does not implement service bookkeeping or custom fee escrow.
 
-Token request fees and provider compensation are protocol integration concerns outside this initial browser adapter. A future source or settlement adapter needs separately reviewed evidence and delivery contracts; do not infer those operations from a successful local request.
+Qentra is the public source identity. Developers verify commitments, fixed inputs, reveal consistency, output and mapping. These checks establish record integrity; they do not independently certify source physics. The program is live on mainnet at `CcoAe9c5yenzozkSqdiJAmaCeoZTiSSV5urBUnC1oa8d`, with upgrade authority retained. Explicit RPC/quote configuration and service readiness remain integration requirements.
 
-Use a secure browser context, keep application secrets outside records and exported files, preserve the output/configuration pair for reproducibility, and distinguish a trusted entropy source from a mathematically reproducible mapping. Local history can be unavailable due to quotas or browser policy; when `storageError` is set, copy/export the current result before leaving.
+The browser adapter remains a historical cryptographic source mode with its own schema and tests, under a separate subpath. Native Solana proof records do not inherit browser generation claims.
