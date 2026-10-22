@@ -23,3 +23,15 @@ Root also exports `mapOutput`, `ProtocolInput`, `ProtocolRecord`, `RequestRecord
 `@qentra/sdk/browser` retains the historical browser client, adapter and schema-1 persistence helpers. It is a separate source mode; schema-1 records are not Solana proof records.
 
 Application mapping results are `number | string | string[]`. Quote `amount` and capacity are bigint; use strings for JSON transport. Protocol records already store fees and sequence as decimal strings. No callback registration, escrow allowance, subscription balance or token request API is part of the selected native draw journey. The schema retains callback/delivery fields for compatibility; native draws use zero callback addresses and `not-requested` delivery.
+
+## Proof-file API and installed CLI
+
+Root and `@qentra/sdk/proof` export:
+
+| API | Result |
+| --- | --- |
+| `parseProofFile(json: string)` | Verified, detached schema-4 `ProtocolRecord`; rejects malformed or inconsistent files |
+| `exportProofFile(record: ProtocolRecord)` | Verified JSON text preserving fixed inputs and mapping; trailing newline |
+| `verifyProofFile(value: unknown)` | `OfflineProofVerification` with `scope: 'offline-content-integrity'`, ID, digest, output and mapping |
+
+All functions are asynchronous and reuse `verifyProtocolRecord`. `qentra-proof verify <proof.json>` uses only local file data and exits nonzero on failure. The CLI has no RPC, wallet or payment option. Offline success does not authenticate chain/source/payment provenance or trust saved flags. See [export/recipient journey](records.md).
