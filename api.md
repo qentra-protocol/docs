@@ -8,7 +8,7 @@
 | `quote()` | `{ amount: bigint, recipient, symbol: 'SOL', decimals: 9, capacity: bigint, noRequestRent, ready }` |
 | `serviceQuote(requester?, sequence?)` | GET current price or POST bound persisted identity; validates program, recipient, amount, expiry and request identity |
 | `approveFee()` | Requires connected wallet and returns quote; no separate allowance transaction |
-| `request(input, { expectedFee? })` | Input `{ bytes: 32, mapping, serviceQuote? }`; SDK binds service quote itself; returns schema-4 record after confirmation |
+| `request(input, { expectedFee?, checkpoint? })` | Input `{ bytes: 32, mapping, serviceQuote? }`; SDK binds service quote itself; returns schema-4 record after confirmation; awaits durable checkpoint before broadcast |
 | `getRequest(sequenceOrId)` | Reopens historical account or event record; IDs bind network, program and sequence |
 | `waitForResult(id, { timeoutMs?, signal? })` | Polls to fulfilled; default 120000 ms; rejects expiry, cancellation or pending timeout |
 | `subscribe(id, listener)` | Polls approximately every 1500 ms; returns unsubscribe function |
@@ -35,3 +35,7 @@ Root and `@qentra/sdk/proof` export:
 | `verifyProofFile(value: unknown)` | `OfflineProofVerification` with `scope: 'offline-content-integrity'`, ID, digest, output and mapping |
 
 All functions are asynchronous and reuse `verifyProtocolRecord`. `qentra-proof verify <proof.json>` uses only local file data and exits nonzero on failure. The CLI has no RPC, wallet or payment option. Offline success does not authenticate chain/source/payment provenance or trust saved flags. See [export/recipient journey](records.md).
+
+## Interrupted-draw recovery
+
+Root and `@qentra/sdk/solana` export `RecoveryCheckpoint`, `RecoveryResult`, `parseRecoveryCheckpoint(json)` and `RecoverableRequestError`. `request` accepts an optional asynchronous `checkpoint` persistence callback. `recoverRequest(checkpoint)` returns pending/failed/expired/fulfilled state for the same bound draw without a wallet, quote or submission. See [durable checkpoint and fresh-process recipe](recovery.md).
