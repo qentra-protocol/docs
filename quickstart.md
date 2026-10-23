@@ -36,3 +36,5 @@ Review the quoted amount before calling `request`. That call obtains a requester
 Save the ID before waiting. A timeout means reopen this ID, not create/pay another draw. The awaited `checkpoint` callback must save the typed handle durably before broadcast. If confirmation fails, a wallet-free process can load it and call `recoverRequest` without submitting another payment. Read [recovery](recovery.md).
 
 For an allocation, fix `mapping: { kind: 'shuffle', items: ['Amber', 'Birch', 'Cedar'] }` before payment. For sampling, use `pickUnique` with a fixed count; for weighted selection use `weightedPick` with fixed weights. Rules, labels and quote identity are included in the input digest; do not remap after the reveal.
+
+For the complete weighted-applicant journey, use [saved allocation and agent choice](allocation.md): installed start, fresh-process reopen, verified decision export and readback.

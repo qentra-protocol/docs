@@ -39,3 +39,7 @@ All functions are asynchronous and reuse `verifyProtocolRecord`. `qentra-proof v
 ## Interrupted-draw recovery
 
 Root and `@qentra/sdk/solana` export `RecoveryCheckpoint`, `RecoveryResult`, `parseRecoveryCheckpoint(json)` and `RecoverableRequestError`. `request` accepts an optional asynchronous `checkpoint` persistence callback. `recoverRequest(checkpoint)` returns pending/failed/expired/fulfilled state for the same bound draw without a wallet, quote or submission. See [durable checkpoint and fresh-process recipe](recovery.md).
+
+## Application recipe
+
+The packed `examples/allocation-draw.mjs` exports `allocationInput`, `startAllocation`, `reopenAllocation` and `readAllocationDecision`; these compose existing SDK APIs without changing them. See [fixed weighted applicants → recovered decision](allocation.md).
