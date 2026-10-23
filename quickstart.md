@@ -38,3 +38,5 @@ Save the ID before waiting. A timeout means reopen this ID, not create/pay anoth
 For an allocation, fix `mapping: { kind: 'shuffle', items: ['Amber', 'Birch', 'Cedar'] }` before payment. For sampling, use `pickUnique` with a fixed count; for weighted selection use `weightedPick` with fixed weights. Rules, labels and quote identity are included in the input digest; do not remap after the reveal.
 
 For the complete weighted-applicant journey, use [saved allocation and agent choice](allocation.md): installed start, fresh-process reopen, verified decision export and readback.
+
+For tournament or agent cancellation, use [bounded saved-draw waits](waiting.md); stop the local wait and reopen the saved draw without another payment.

@@ -43,3 +43,5 @@ Root and `@qentra/sdk/solana` export `RecoveryCheckpoint`, `RecoveryResult`, `pa
 ## Application recipe
 
 The packed `examples/allocation-draw.mjs` exports `allocationInput`, `startAllocation`, `reopenAllocation` and `readAllocationDecision`; these compose existing SDK APIs without changing them. See [fixed weighted applicants → recovered decision](allocation.md).
+
+See [bounded saved-draw waits](waiting.md) for `waitForResult(id, {signal, timeoutMs})`, cancellation during RPC/poll delay and reopening the same ID.
