@@ -1,4 +1,4 @@
-# SDK API · 0.2.0-dev.0
+# SDK API · 0.3.0-dev.0
 
 `QVRFClient` and `OnchainQVRFClient` alias `SolanaQVRFClient`.
 

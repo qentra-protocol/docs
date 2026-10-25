@@ -47,6 +47,6 @@ RPC outages and malformed/binding-invalid records reject without sending anythin
 
 ## Installed example and proof
 
-[interrupted-draw.mjs](https://github.com/nicpilsner/qentra-sdk/blob/main/examples/interrupted-draw.mjs) exports `startTournament` and wallet-free `reopenTournament`. After fulfillment, it writes a proof using `exportProofFile`; verify that file with the existing `qentra-proof verify proof.json` command or [proof-file API](verification.md).
+[interrupted-draw.mjs](https://github.com/qentra-protocol/sdk/blob/main/examples/interrupted-draw.mjs) exports `startTournament` and wallet-free `reopenTournament`. After fulfillment, it writes a proof using `exportProofFile`; verify that file with the existing `qentra-proof verify proof.json` command or [proof-file API](verification.md).
 
 The package proof installs packed core/SDK into a fresh consumer, uses real Kit transaction encoding and one ephemeral external-wallet signature against inert RPC fixtures, saves before an ambiguous send failure and exits. A fresh process without a wallet reads the file and verifies the same event-bound draw/payment/result through the installed package. It also exercises persistence failure, pending/not-found/failed/expired states and binding rejection, with zero recovery signatures or submissions. This fixture performs no production RPC submission.

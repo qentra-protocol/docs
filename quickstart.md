@@ -5,7 +5,7 @@ Use Node 22+, an explicit RPC endpoint, Qentra's current quote endpoint and a wa
 Install the reviewed core and SDK tarballs together:
 
 ```sh
-npm install /path/to/qentra-core-0.1.0-dev.0.tgz /path/to/qentra-sdk-0.2.0-dev.0.tgz
+npm install /path/to/qentra-core-0.2.0-dev.0.tgz /path/to/qentra-sdk-0.3.0-dev.0.tgz
 ```
 
 ```ts

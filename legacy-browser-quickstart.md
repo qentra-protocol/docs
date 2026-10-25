@@ -2,7 +2,7 @@
 
 # Request randomness and map an outcome
 
-Develop from source with Node 22 or newer. Build and pack `@qentra/core` in the core repository, then install that local archive in the SDK repository as described in its README. The development packages have version `0.1.0-dev.0` and are installed from source.
+Develop from source with Node 22 or newer. Build and pack `@qentra/core` in the core repository, then install that local archive in the SDK repository as described in its README. The development packages use core `0.2.0-dev.0` and SDK `0.3.0-dev.0` and are installed from source.
 
 ```ts
 import { QVRFClient, BrowserEntropyAdapter, MemoryRepository, validateRecord } from '@qentra/sdk/browser';
